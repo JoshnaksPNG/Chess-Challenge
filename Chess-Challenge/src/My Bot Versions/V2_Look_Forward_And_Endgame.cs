@@ -1,7 +1,7 @@
 ﻿using ChessChallenge.API;
 using System.Collections.Generic;
 
-public class MyBot : IChessBot
+public class V2Bot : IChessBot
 {
     int thoughtDepth = 1;
 
@@ -9,6 +9,7 @@ public class MyBot : IChessBot
     int[] pieceValues = { 0, 100, 300, 330, 500, 900, 10000 };
 
     // Lookup for Piece Square Tables
+    //Dictionary <PieceType, int[]> PSTableLookup = GeneratePSTable();
     int[,] PSTableLookup = 
     {
         { // Pawn Table
@@ -110,6 +111,8 @@ public class MyBot : IChessBot
 
         }
 
+
+
         lastFrom = bestMove.StartSquare;
         lastTo = bestMove.TargetSquare;
         return bestMove;
@@ -170,8 +173,9 @@ public class MyBot : IChessBot
         {
             // Always go for checkmate
             if (MoveIsCheckmate(board, move))
-                return 10000;
+                return 1000;
             
+
             // Initialize Score
             int score = EvaluateScore(board, move);
 
@@ -186,6 +190,7 @@ public class MyBot : IChessBot
                 bestScore = score;
                 bestMove = move;
             }
+
         }
 
         if (!isMyTurn)
@@ -203,7 +208,7 @@ public class MyBot : IChessBot
 
         // Penalize Moving Back To Last Location
         if (move.StartSquare == lastFrom && move.TargetSquare == lastTo)
-            score -= 300;
+            score -= 200;
 
         // Change Behaviour For Endgame 
         // Non-Endgame Behaviour
@@ -238,7 +243,7 @@ public class MyBot : IChessBot
             // Subtract Score if Moving King
             if (capturedType == 6)
             {
-                score -= 200;
+                score -= 300;
             }
         }
         else // Endgame Behaviour
